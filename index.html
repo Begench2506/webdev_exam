@@ -119,40 +119,40 @@
 		<div class="container-fluid">
 			<div class="row">
 				<div class="col-12">
-					<h2 class="text-center text-uppercase mt-5 mb-5">список маршрутов</h2>
+					<h2 class="text-center text-uppercase mt-5 mb-5">Список маршрутов</h2>
 				</div>
 			</div>
 			<nav class="navbar navbar-expand navbar-dark" style="background-color: #0b193c;">
 				<div class="container-fluid">
-				  <div class="collapse navbar-collapse" id="navbarRoutes">
-					<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-					  <li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-						  Объект
-						</a>
-						<ul class="dropdown-menu">
-						  <li><a class="dropdown-item" href="#">Объект 1</a></li>
-						  <li><a class="dropdown-item" href="#">Объект 2</a></li>
+					<div class="collapse navbar-collapse" id="navbarRoutes">
+						<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+							<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+									Объект
+								</a>
+								<ul class="dropdown-menu">
+									<li><a class="dropdown-item" href="#">Объект 1</a></li>
+									<li><a class="dropdown-item" href="#">Объект 2</a></li>
+								</ul>
+							</li>
 						</ul>
-					  </li>
-					</ul>
-					<form class="d-flex" role="search">
-					  <input class="form-control me-2" type="search" placeholder="Название" aria-label="Поиск" id="routeNameSearch">
-					  <button class="btn btn-outline-light" type="submit">Поиск</button>
-					</form>
-				  </div>
+						<form class="d-flex" role="search">
+							<input class="form-control me-2" type="search" placeholder="Название" aria-label="Поиск" id="routeNameSearch">
+							<button class="btn btn-outline-light" type="submit">Поиск</button>
+						</form>
+					</div>
 				</div>
-			  </nav>
-
-			  <div class="table-responsive">
+			</nav>
+	
+			<div class="table-responsive">
 				<table class="table table-hover align-middle text-left" id="routes">
 					<thead class="table-secondary" style="background-color: #0b193c; color: white;">
 						<tr>
 							<th scope="col">Название</th>
 							<th scope="col">Описание</th>
 							<th scope="col">Основные объекты</th>
-							<th scope="col"> </th>
-						  </tr>
+							<th scope="col">Выбор</th>
+						</tr>
 					</thead>
 				  </table>
 			  </div>
@@ -160,76 +160,54 @@
 		</div>
 	</section>
 
-	<section class="guides">
-		<div class="container-fluid">
-			<div class="row">
-				<div class="col-12">
-					<h2 class="text-center text-uppercase mt-5 mb-5">доступные гиды</h2>
+	<!-- Добавлен раздел с таблицей гидов -->
+	<section id="guidesTableSection" style="background-color: #eee; display: none;">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="text-center text-uppercase mt-5 mb-5">Таблица доступных гидов</h2>
+                </div>
+            </div>
+            <div class="table-responsive">
+				<div class="container-fluid mt-3 pt-2 pb-3 d-flex justify-content-center align-items-center" style="background-color: #0b193c; color: white;">
+					<div class="row">
+						<div class="col-md-3">
+							<label for="languageFilter">Выберите язык:</label>
+							<select class="form-select" id="languageFilter">
+								<option value="">Не выбрано</option>
+								<!-- Опции языков будут добавлены динамически с помощью JavaScript -->
+							</select>
+						</div>
+						<div class="col-md-3">
+							<label for="experienceFilter">Опыт работы от:</label>
+							<input type="number" class="form-control" id="experienceFilterFrom">
+						</div>
+						<div class="col-md-3">
+							<label for="experienceFilterTo">Опыт работы до:</label>
+							<input type="number" class="form-control" id="experienceFilterTo">
+						</div>
+						<div class="col-md-3">
+							<button type="button" class="btn btn-secondary mt-4" onclick="applyFilters()">Применить</button>
+						</div>
+					</div>
 				</div>
-			</div>
-			<nav class="navbar navbar-expand navbar-dark" style="background-color: #0b193c;">
-				<div class="container-fluid">
-				  <div class="collapse navbar-collapse" id="navbarGuides">
-					<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-					  <li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-						  Объект
-						</a>
-						<ul class="dropdown-menu">
-						  <li><a class="dropdown-item" href="#">Объект 1</a></li>
-						  <li><a class="dropdown-item" href="#">Объект 2</a></li>
-						</ul>
-					  </li>
-					</ul>
-					<form class="d-flex" role="search">
-					  <input class="form-control me-2" type="search" placeholder="Название" aria-label="Поиск">
-					  <button class="btn btn-outline-light" type="submit">Поиск</button>
-					</form>
-				  </div>
-				</div>
-			  </nav>
+                <table class="table table-hover align-middle text-center" id="guidesTable">
+                    <thead class="table-secondary" style="background-color: #0b193c; color: white;">
+                        <tr>
+                            <th scope="col">Картинка профиля</th>
+                            <th scope="col">ФИО</th>
+                            <th scope="col">Языки</th>
+                            <th scope="col">Опыт работы</th>
+                            <th scope="col">Стоимость (руб/час)</th>
+                            <th scope="col">Выбор</th>
+                        </tr>
+                    </thead>
+                    <tbody id="guidesTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
 
-			  <div class="table-responsive">
-				<table class="table table-hover align-middle text-center">
-					<thead class="table-secondary" style="background-color: #0b193c; color: white;">
-						<tr>
-							<th scope="col">Название</th>
-							<th scope="col">Описание</th>
-							<th scope="col">Основные объекты</th>
-							<th scope="col"> </th>
-						  </tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>Название</td>
-							<td>Описание</td>
-							<td>Объект</td>
-							<td>Выбрать</td>
-						</tr>
-						<tr>
-							<td>Название</td>
-							<td>Описание</td>
-							<td>Объект</td>
-							<td>Выбрать</td>
-						</tr>
-						<tr>
-							<td>Название</td>
-							<td>Описание</td>
-							<td>Объект</td>
-							<td>Выбрать</td>
-						</tr>
-						<tr>
-							<td>Название</td>
-							<td>Описание</td>
-							<td>Объект</td>
-							<td>Выбрать</td>
-						</tr>
-					</tbody>
-				  </table>
-			  </div>
-
-		</div>
-	</section>
 	
 	
 
