@@ -10,52 +10,40 @@ async function d() {
     let b = await getData();
     let c = "";
     for (let i = 0; i < b.length; i++) {
-        let truncatedDescription = b[i].description.split(' ').slice(0, 5).join(' ');
-        let truncatedMainObject = b[i].mainObject.split(' ').slice(0, 5).join(' ');
         c += `
-        <tr>
+        <tr class="clickable" data-description="${b[i].description}" data-main-object="${b[i].mainObject}">
             <td>${b[i].name}</td>
-            <td class="description-cell" title="${b[i].description}">${truncatedDescription}</td>
-            <td class="main-object-cell" title="${b[i].mainObject}">${truncatedMainObject}</td>
+            <td class="description-cell">${b[i].description.substring(0, 5) + '...'}</td>
+            <td class="main-object-cell">${b[i].mainObject.substring(0, 5) + '...'}</td>
             <td><button type="button" class="btn btn-secondary">Выбрать</button></td>
         </tr>`;
     }
     tableRoute.innerHTML = c;
     table.appendChild(tableRoute);
 
-    // Обработчик событий для вывода полного содержания при наведении на ячейку
-    const descriptionCells = document.querySelectorAll('.description-cell');
-    const mainObjectCells = document.querySelectorAll('.main-object-cell');
-
-    descriptionCells.forEach(cell => {
-        cell.addEventListener('mouseover', () => {
-            cell.textContent = b.find(route => route.name === cell.parentNode.children[0].textContent).description;
-        });
-
-        cell.addEventListener('mouseout', () => {
-            cell.textContent = cell.title.split(' ').slice(0, 5).join(' ');
-        });
-    });
-
-    mainObjectCells.forEach(cell => {
-        cell.addEventListener('mouseover', () => {
-            cell.textContent = b.find(route => route.name === cell.parentNode.children[0].textContent).mainObject;
-        });
-
-        cell.addEventListener('mouseout', () => {
-            cell.textContent = cell.title.split(' ').slice(0, 5).join(' ');
-        });
+    // Добавим обработчик событий для кнопок
+    const rows = document.querySelectorAll('.clickable');
+    rows.forEach(row => {
+        row.addEventListener('click', showFullContent);
     });
 }
 
+function showFullContent() {
+    const descriptionCell = this.querySelector('.description-cell');
+    const mainObjectCell = this.querySelector('.main-object-cell');
 
-
-d();
-
-
-
-async function getDataGuides(routeId) {
-    const response = await fetch(`http://exam-2023-1-api.std-900.ist.mospolytech.ru/api/routes/${routeId}/guides`);
-    const data = await response.json();
-    return data;
+    if (!this.classList.contains('full-content')) {
+        // Показываем полное содержимое
+        descriptionCell.textContent = this.dataset.description;
+        mainObjectCell.textContent = this.dataset.mainObject;
+        this.classList.add('full-content');
+    } else {
+        // Скрываем полное содержимое
+        descriptionCell.textContent = this.dataset.description.substring(0, 5) + '...';
+        mainObjectCell.textContent = this.dataset.mainObject.substring(0, 5) + '...';
+        this.classList.remove('full-content');
+    }
 }
+
+// После загрузки страницы показываем сокращенную таблицу
+document.addEventListener('DOMContentLoaded', d);
