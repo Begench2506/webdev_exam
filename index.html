@@ -10,6 +10,7 @@
 	<link rel="shortcut icon" href="images/logo.png">
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<link href="css/style.css" rel="stylesheet">
+	<script src="js/main.js" defer></script>
 	<title>ГидГрад</title>
 </head>
 <body>
@@ -115,7 +116,7 @@
 	</section>
 
 	<section class="routes">
-		<div class="container">
+		<div class="container-fluid">
 			<div class="row">
 				<div class="col-12">
 					<h2 class="text-center text-uppercase mt-5 mb-5">список маршрутов</h2>
@@ -136,7 +137,7 @@
 					  </li>
 					</ul>
 					<form class="d-flex" role="search">
-					  <input class="form-control me-2" type="search" placeholder="Название" aria-label="Поиск">
+					  <input class="form-control me-2" type="search" placeholder="Название" aria-label="Поиск" id="routeNameSearch">
 					  <button class="btn btn-outline-light" type="submit">Поиск</button>
 					</form>
 				  </div>
@@ -144,7 +145,7 @@
 			  </nav>
 
 			  <div class="table-responsive">
-				<table class="table table-hover align-middle text-center">
+				<table class="table table-hover align-middle text-left" id="routes">
 					<thead class="table-secondary" style="background-color: #0b193c; color: white;">
 						<tr>
 							<th scope="col">Название</th>
@@ -153,32 +154,6 @@
 							<th scope="col"> </th>
 						  </tr>
 					</thead>
-					<tbody>
-						<tr>
-							<td>Название</td>
-							<td>Описание</td>
-							<td>Объект</td>
-							<td>Выбрать</td>
-						</tr>
-						<tr>
-							<td>Название</td>
-							<td>Описание</td>
-							<td>Объект</td>
-							<td>Выбрать</td>
-						</tr>
-						<tr>
-							<td>Название</td>
-							<td>Описание</td>
-							<td>Объект</td>
-							<td>Выбрать</td>
-						</tr>
-						<tr>
-							<td>Название</td>
-							<td>Описание</td>
-							<td>Объект</td>
-							<td>Выбрать</td>
-						</tr>
-					</tbody>
 				  </table>
 			  </div>
 
@@ -186,7 +161,7 @@
 	</section>
 
 	<section class="guides">
-		<div class="container">
+		<div class="container-fluid">
 			<div class="row">
 				<div class="col-12">
 					<h2 class="text-center text-uppercase mt-5 mb-5">доступные гиды</h2>
@@ -261,5 +236,6 @@
 
 
 <script src="js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
