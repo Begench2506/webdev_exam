@@ -193,8 +193,70 @@
                 </table>
             </div>
 			<div class="container-fluid mt-3 d-flex justify-content-center">
-				<button type="button" class="btn btn-secondary mt-3 mb-5" id="submitRequestBtn" style="background-color: #0b193c; display: none;">Оформить заявку</button>
+				<button type="button" class="btn btn-secondary mt-3 mb-5 "  data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="submitRequestBtn" style="background-color: #0b193c; display: none;">Оформить заявку</button>
 			</div>
+			<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+				<div class="modal-dialog">
+				  <div class="modal-content">
+					<div class="modal-header">
+					  <h1 class="modal-title fs-5" id="staticBackdropLabel">Оформление заявки</h1>
+					  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+					</div>
+					<div class="modal-body">
+					  <div class="row">
+						<div class="col-12">
+							<h6>ФИО гида:</h6>
+						</div>
+						<div class="col-12">
+							<h6>Выбранный маршрут:</h6>
+						</div>
+						<div class="col-12 text-center mt-3 mb-3">
+							<h6>Детали экскурсии</h6>
+						</div>
+						<div class="col-6 text-center">
+							<label class="form_label me-2">Дата</label>
+							<input class="form_input text-center" type="date" placeholder=" ">
+						</div>
+						<div class="col-6 text-center">
+							<label class="form_label me-2">Начало</label>
+							<input class="form_input text-center" type="time" placeholder=" ">
+						</div>
+						<div class="col-12 text-center mt-3">
+						<select class="form-select" aria-label="Длительность">
+							<option selected>Длительность</option>
+							<option value="1">1 час</option>
+							<option value="2">2 часа</option>
+							<option value="3">3 часа</option>
+						</select>
+						</div>
+						<div class="col-12 mt-3">
+							<label class="form_label me-2">Количество человек</label>
+							<input class="form_input text-center" type="number" placeholder=" ">
+						</div>
+						<div class="col-12 text-center mt-3 mb-3">
+							<h6>Дополнительные опции</h6>
+						</div>
+						<div class="col-12">
+							<label class="label_checkbox">
+								<input type="checkbox" class="input_checkbox">
+								<span class="span_checkbox">Скидка 15% для школьников и студентов</span>
+							</label>
+						</div>
+						<div class="col-12">
+							<label class="label_checkbox">
+								<input type="checkbox" class="input_checkbox">
+								<span class="span_checkbox">Трансфер до ближайших станций метро после экскурсии</span>
+							</label>
+						</div>
+					  </div>
+					</div>
+					<div class="modal-footer">
+					  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+					  <button type="button" class="btn btn-primary">Отправить</button>
+					</div>
+				  </div>
+				</div>
+			  </div>
             <div id="selectedGuideInfo" class="mt-3" style="display: none;"></div>
         </div>
     </section>
