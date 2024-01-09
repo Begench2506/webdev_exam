@@ -1,5 +1,4 @@
 let selectedRouteId = null;
-let selectedGuideId = null;
 
 async function getData() {
     const response = await fetch('http://exam-2023-1-api.std-900.ist.mospolytech.ru/api/routes?api_key=880ab64c-4356-4119-aa51-19af575a54ae');
@@ -88,7 +87,6 @@ async function d() {
             guidesTableSection.style.display = 'none';
             submitRequestBtn.style.display = 'none';
             selectedRouteId = null;
-            selectedGuideId = null;
         } else {
             showGuidesTable(routeId);
             selectedRouteId = routeId;
@@ -122,16 +120,29 @@ async function showGuidesTable(routeId) {
     selectedGuideInfo.innerHTML = '';
 }
 
-function handleGuideSelection(guideId, guideName) {
+function handleGuideSelection(guideId, guideName, routeName) {
     console.log('Гид выбран:', guideName);
+
+    // Сохраняем выбранное название маршрута для последующего использования
+    const selectedRouteName = routeName;
+
     const submitRequestBtn = document.getElementById('submitRequestBtn');
     const selectedGuideInfo = document.getElementById('selectedGuideInfo');
 
     selectedGuideId = guideId;
 
-    selectedGuideInfo.innerHTML = `<p>Выбран гид: ${guideName}</p>`;
+    // Обновляем содержимое модального окна информацией о выбранном маршруте и гиде
+    selectedGuideInfo.innerHTML = `
+        <p>Выбран гид: ${guideName}</p>
+        <p>Выбран маршрут: ${selectedRouteName}</p>
+    `;
+
     submitRequestBtn.style.display = 'block';
 }
+
+
+// Остальная часть вашего существующего кода...
+
 
 function showFullContent() {
     const descriptionCell = this.querySelector('.description-cell');
@@ -170,22 +181,44 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 });
 
-async function getMainObjects() {
-    const response = await fetch('http://exam-2023-1-api.std-900.ist.mospolytech.ru/api/main_objects?api_key=880ab64c-4356-4119-aa51-19af575a54ae');
-    const data = await response.json();
-    return data;
-}
+async function parser() {
+    let oObject = [];
+    let dataq = await getData();
+    let rez
+    for (let i = 0; i < dataq.length; i++) {
+        rez = "";
 
-function populateMainObjectDropdown(mainObjects) {
-    const mainObjectFilter = document.getElementById('mainObjectFilter');
-    mainObjectFilter.innerHTML = '<option value="">Не выбрано</option>';
+        for (let k = 0; k < dataq[i].mainObject.length; k++) {
 
-    const uniqueMainObjects = Array.from(new Set(mainObjects.map(route => route.mainObject)));
-
-    for (const mainObject of uniqueMainObjects) {
-        mainObjectFilter.innerHTML += `<option value="${mainObject}">${mainObject}</option>`;
+            if (dataq[i].mainObject[k] == "-" || dataq[i].mainObject[k] == "," || dataq[i].mainObject[k] == "." || dataq[i].mainObject[k] == "n") {
+                if (rez.length > 4 && rez.length < 50) {
+                    oObject.push(rez);
+                    rez = ""
+                }
+            }
+            else {
+                rez += dataq[i].mainObject[k];
+            }
+        }
     }
+
+    return oObject;
 }
+
+async function populateMainObjectDropdown(mainObjects) {
+    let data = await getData()
+    let storeData = await parser(data)
+    for (let i = 0; i < storeData.length; i++) {
+        let v = document.createElement('option')
+        v.text = storeData[i]
+        v.value = i
+        mainObjectFilter.appendChild(v)
+    };
+    
+
+}
+
+populateMainObjectDropdown()
 
 async function applyFilters() {
     const selectedMainObjectId = document.getElementById('mainObjectFilter').value;
@@ -238,6 +271,11 @@ function displayRoutes(routes) {
 }
 
 document.getElementById('submitRequestBtn').addEventListener('click', function() {
-    // Добавьте код для обработки оформления заявки с использованием selectedRouteId и selectedGuideId
-    console.log('Оформление заявки для маршрута:', selectedRouteId, 'и гида:', selectedGuideId);
+    if (selectedRouteId !== null && selectedGuideId !== null) {
+        console.log('Оформление заявки для маршрута:', selectedRouteId, 'и гида:', selectedGuideId);
+        // Добавьте здесь код для обработки оформления заявки
+    } else {
+        console.log('Выберите маршрут и гида перед оформлением заявки.');
+    }
 });
+
