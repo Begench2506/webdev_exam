@@ -106,7 +106,7 @@ async function showGuidesTable(routeId) {
     for (let i = 0; i < guidesData.length; i++) {
         guidesTableBody.innerHTML += `
             <tr>
-                <td><img src="${guidesData[i].profileImage}" alt="Профиль"></td>
+                <td><img url(../images/user.png)></td>
                 <td>${guidesData[i].name}</td>
                 <td>${guidesData[i].language}</td>
                 <td>${guidesData[i].workExperience}</td>
