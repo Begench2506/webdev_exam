@@ -223,12 +223,12 @@
 							<input class="form_input text-center" type="time" placeholder=" ">
 						</div>
 						<div class="col-12 text-center mt-3">
-						<select class="form-select" aria-label="Длительность">
-							<option selected>Длительность</option>
-							<option value="1">1 час</option>
-							<option value="2">2 часа</option>
-							<option value="3">3 часа</option>
-						</select>
+							<select class="form-select" id="durationSelect" aria-label="Длительность" onchange="calculateTotalPrice()">
+								<option selected>Длительность</option>
+								<option value="1">1 час</option>
+								<option value="2">2 часа</option>
+								<option value="3">3 часа</option>
+							</select>
 						</div>
 						<div class="col-12 mt-3">
 							<label class="form_label me-2">Количество человек</label>
@@ -239,18 +239,18 @@
 						</div>
 						<div class="col-12">
 							<label class="label_checkbox">
-								<input type="checkbox" class="input_checkbox">
+								<input type="checkbox" class="input_checkbox" id="discountCheckbox">
 								<span class="span_checkbox">Скидка 15% для школьников и студентов</span>
 							</label>
 						</div>
 						<div class="col-12">
 							<label class="label_checkbox">
-								<input type="checkbox" class="input_checkbox">
+								<input type="checkbox" id="markupCheckbox" class="input_checkbox">
 								<span class="span_checkbox">Трансфер до ближайших станций метро после экскурсии</span>
 							</label>
 						</div>
 						<div class="col-12 mt-3">
-							<h6>Итоговая цена:</h6>
+							<h6>Итоговая цена: <span id="selectedGuidePrice"></span></h6>
 						</div>
 					  </div>
 					</div>
@@ -261,7 +261,7 @@
 				  </div>
 				</div>
 			  </div>
-            <div id="selectedGuideInfo" class="mt-3" style="display: none;"></div>
+            <!-- <div id="selectedGuideInfo" class="mt-3" style="display: none;"></div> -->
         </div>
     </section>
 	<footer class="container-fluid" style="background-color: #0b193c; color: white;">

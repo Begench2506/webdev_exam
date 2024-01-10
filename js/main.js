@@ -1,4 +1,6 @@
 let selectedRouteId = null;
+let selectedGuideId = null;
+let selectedGuidePrice = null;
 
 async function getData() {
     const response = await fetch('http://exam-2023-1-api.std-900.ist.mospolytech.ru/api/routes?api_key=880ab64c-4356-4119-aa51-19af575a54ae');
@@ -106,33 +108,45 @@ async function showGuidesTable(routeId) {
     for (let i = 0; i < guidesData.length; i++) {
         guidesTableBody.innerHTML += `
             <tr>
-                <td><img url(../images/user.png)></td>
+                <td><img src="../images/user.png" alt="Profile Image"></td>
                 <td>${guidesData[i].name}</td>
                 <td>${guidesData[i].language}</td>
                 <td>${guidesData[i].workExperience}</td>
-                <td>${guidesData[i].pricePerHour}</td>
-                <td><button type="button" class="btn btn-secondary" onclick="handleGuideSelection('${guidesData[i].id}', '${guidesData[i].name}')">Выбрать</button></td>
+                <td class="guide-price">${guidesData[i].pricePerHour}</td>
+                <td><button type="button" class="btn btn-secondary" onclick="handleGuideSelection('${guidesData[i].id}', '${guidesData[i].name}', '${guidesData[i].pricePerHour}')">Выбрать</button></td>
             </tr>`;
     }
 
     guidesTableSection.style.display = 'block';
     submitRequestBtn.style.display = 'none';
 }
+
 function toggleGuidesTable(routeId) {
     const selectedRouteName = document.querySelector(`tr[data-route-id="${routeId}"] td:first-child`).textContent;
     document.getElementById('selectedRoute').textContent = selectedRouteName; // Установка выбранного маршрута в модальном окне
     myModal.show();
 }
-function handleGuideSelection(guideId, guideName, routeName) {
-    // Сохраняем выбранное название маршрута для последующего использования
+function handleGuideSelection(guideId, guideName, guidePrice) {
     const submitRequestBtn = document.getElementById('submitRequestBtn');
     const selectedGuideInfo = document.getElementById('selectedGuideInfo');
 
     // Обновляем содержимое модального окна информацией о выбранном маршруте и гиде
     selectedGuideInfo.innerHTML = `${guideName}`;
+    
+    // Сохраняем выбранное название маршрута и стоимость гида для последующего использования
+    selectedGuideId = guideId;
+    selectedGuidePrice = parseFloat(guidePrice); // Преобразуем цену в число
 
     submitRequestBtn.style.display = 'block';
+
+    // Отображаем итоговую цену
+    const selectedGuidePriceElement = document.getElementById('selectedGuidePrice');
+    selectedGuidePriceElement.textContent = `${selectedGuidePrice} руб.`;
 }
+
+
+// Остальная часть вашего существующего кода...
+
 
 function showFullContent() {
     const descriptionCell = this.querySelector('.description-cell');
@@ -169,6 +183,34 @@ document.addEventListener('DOMContentLoaded', async function () {
     } catch (error) {
         console.error('Error during page initialization:', error);
     }
+});
+document.addEventListener('DOMContentLoaded', function () {
+    // ...
+
+    const discountCheckbox = document.querySelector('#discountCheckbox');
+    const markupCheckbox = document.querySelector('#markupCheckbox');
+
+    discountCheckbox.addEventListener('change', updateTotalPrice);
+    markupCheckbox.addEventListener('change', updateTotalPrice);
+
+    function updateTotalPrice() {
+        const selectedDuration = document.getElementById('durationSelect').value;
+        const pricePerHour = parseFloat(selectedGuidePrice);
+        let totalPrice = pricePerHour * selectedDuration;
+
+        // Проверяем оба флажка: скидку и наценку
+        if (discountCheckbox.checked) {
+            totalPrice -= totalPrice * 0.15;
+        }
+
+        if (markupCheckbox.checked) {
+            totalPrice += totalPrice * 0.25;
+        }
+
+        document.getElementById('selectedGuidePrice').textContent = totalPrice.toFixed(2);
+    }
+
+    // ...
 });
 
 async function parser() {
@@ -270,31 +312,31 @@ document.getElementById('submitRequestBtn').addEventListener('click', function()
 });
 
 
-// let selectedRoute = '';
-// let selectedGuide = '';
+function calculateTotalPrice() {
+    // Получаем значение выбранного часов в выпадающем списке "Длительность"
+    const selectedDuration = document.getElementById('durationSelect').value;
 
-// document.getElementById('routesTable').addEventListener('click', function(event) {
-//     if (event.target.tagName === 'BUTTON') {
-//         selectedRoute = event.target.dataset.routeName;
-//     }
-// });
+    // Проверяем, выбрана ли длительность
+    if (selectedDuration !== 'Длительность') {
+        // Преобразуем значение в число
+        const hours = parseInt(selectedDuration);
 
-// document.getElementById('guidesTable').addEventListener('click', function(event) {
-//     if (event.target.tagName === 'BUTTON') {
-//         selectedGuide = event.target.dataset.guideName;
-//     }
-// });
+        // Проверяем, выбран ли гид и установлена ли его цена
+        if (selectedGuideId !== null && selectedGuidePrice !== null) {
+            // Вычисляем итоговую цену
+            const totalPrice = hours * selectedGuidePrice;
 
-// function openModal() {
-//     if (selectedRoute && selectedGuide) {
-//         document.getElementById('selectedRoute').textContent = selectedRoute;
-//         document.getElementById('selectedGuide').textContent = selectedGuide;
+            // Обновляем элемент с идентификатором "selectedGuidePrice"
+            const selectedGuidePriceElement = document.getElementById('selectedGuidePrice');
+            selectedGuidePriceElement.textContent = `${totalPrice} руб.`;
 
-//         var myModal = new bootstrap.Modal(document.getElementById('staticBackdrop'), {
-//             keyboard: false
-//         });
-//         myModal.show();
-//     } 
-
-    
+            // Отображаем кнопку "Оформить заявку"
+            submitRequestBtn.style.display = 'block';
+        } else {
+            console.log('Выберите гида перед расчетом цены.');
+        }
+    } else {
+        console.log('Выберите длительность экскурсии для расчета цены.');
+    }
+}
     
