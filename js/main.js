@@ -117,32 +117,22 @@ async function showGuidesTable(routeId) {
 
     guidesTableSection.style.display = 'block';
     submitRequestBtn.style.display = 'none';
-    selectedGuideInfo.innerHTML = '';
 }
-
+function toggleGuidesTable(routeId) {
+    const selectedRouteName = document.querySelector(`tr[data-route-id="${routeId}"] td:first-child`).textContent;
+    document.getElementById('selectedRoute').textContent = selectedRouteName; // Установка выбранного маршрута в модальном окне
+    myModal.show();
+}
 function handleGuideSelection(guideId, guideName, routeName) {
-    console.log('Гид выбран:', guideName);
-
     // Сохраняем выбранное название маршрута для последующего использования
-    const selectedRouteName = routeName;
-
     const submitRequestBtn = document.getElementById('submitRequestBtn');
     const selectedGuideInfo = document.getElementById('selectedGuideInfo');
 
-    selectedGuideId = guideId;
-
     // Обновляем содержимое модального окна информацией о выбранном маршруте и гиде
-    selectedGuideInfo.innerHTML = `
-        <p>Выбран гид: ${guideName}</p>
-        <p>Выбран маршрут: ${selectedRouteName}</p>
-    `;
+    selectedGuideInfo.innerHTML = `${guideName}`;
 
     submitRequestBtn.style.display = 'block';
 }
-
-
-// Остальная часть вашего существующего кода...
-
 
 function showFullContent() {
     const descriptionCell = this.querySelector('.description-cell');
@@ -279,3 +269,32 @@ document.getElementById('submitRequestBtn').addEventListener('click', function()
     }
 });
 
+
+// let selectedRoute = '';
+// let selectedGuide = '';
+
+// document.getElementById('routesTable').addEventListener('click', function(event) {
+//     if (event.target.tagName === 'BUTTON') {
+//         selectedRoute = event.target.dataset.routeName;
+//     }
+// });
+
+// document.getElementById('guidesTable').addEventListener('click', function(event) {
+//     if (event.target.tagName === 'BUTTON') {
+//         selectedGuide = event.target.dataset.guideName;
+//     }
+// });
+
+// function openModal() {
+//     if (selectedRoute && selectedGuide) {
+//         document.getElementById('selectedRoute').textContent = selectedRoute;
+//         document.getElementById('selectedGuide').textContent = selectedGuide;
+
+//         var myModal = new bootstrap.Modal(document.getElementById('staticBackdrop'), {
+//             keyboard: false
+//         });
+//         myModal.show();
+//     } 
+
+    
+    

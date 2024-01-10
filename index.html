@@ -199,16 +199,17 @@
 				<div class="modal-dialog">
 				  <div class="modal-content">
 					<div class="modal-header">
-					  <h1 class="modal-title fs-5" id="staticBackdropLabel">Оформление заявки</h1>
+					  <h1 class="modal-title fs-5" id="staticBackdropLabel" onclick="openModal()">Оформление заявки</h1>
 					  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
 					</div>
+					<!-- <div id="selectedGuideInfo" class="mt-3"></div> -->
 					<div class="modal-body">
 					  <div class="row">
 						<div class="col-12">
-							<h6>ФИО гида:</h6>
+							<h6>ФИО гида: <span id="selectedGuideInfo"></span></h6>
 						</div>
 						<div class="col-12">
-							<h6>Выбранный маршрут:</h6>
+							<h6>Выбранный маршрут: <br> <span id="selectedRoute"></span></h6>
 						</div>
 						<div class="col-12 text-center mt-3 mb-3">
 							<h6>Детали экскурсии</h6>
@@ -247,6 +248,9 @@
 								<input type="checkbox" class="input_checkbox">
 								<span class="span_checkbox">Трансфер до ближайших станций метро после экскурсии</span>
 							</label>
+						</div>
+						<div class="col-12 mt-3">
+							<h6>Итоговая цена:</h6>
 						</div>
 					  </div>
 					</div>
