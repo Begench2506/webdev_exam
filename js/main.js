@@ -2,18 +2,21 @@ let selectedRouteId = null;
 let selectedGuideId = null;
 let selectedGuidePrice = null;
 
+//Получаем данные о маршрутах
 async function getData() {
     const response = await fetch('http://exam-2023-1-api.std-900.ist.mospolytech.ru/api/routes?api_key=880ab64c-4356-4119-aa51-19af575a54ae');
     const data = await response.json();
     return data;
 }
 
+//Получаем данные о гидах
 async function getGuidesData(routeId) {
     const response = await fetch(`http://exam-2023-1-api.std-900.ist.mospolytech.ru/api/routes/${routeId}/guides?api_key=880ab64c-4356-4119-aa51-19af575a54ae`);
     const data = await response.json();
     return data;
 }
 
+//Функция отвечающая за вывод информации
 async function d() {
     let table = document.getElementById("routes");
     let tableRoute = document.createElement("tbody");
@@ -25,6 +28,7 @@ async function d() {
     let selectedRouteId = null;
     let selectedGuideId = null;
 
+    //Функция отображающая маршруты
     function displayRoutes() {
         const startIndex = (currentPage - 1) * itemsPerPage;
         const endIndex = startIndex + itemsPerPage;
@@ -40,7 +44,8 @@ async function d() {
                     <td><button type="button" class="btn btn-secondary" onclick="toggleGuidesTable('${currentRoutes[i].id}')">Выбрать</button></td>
                 </tr>`;
         }
-
+        
+        //Заполнение таблицы маршрутов
         const tableHeader = `
             <thead class="table-secondary" style="background-color: #0b193c; color: white;">
                 <tr>
@@ -61,8 +66,10 @@ async function d() {
         });
     }
 
+    //Вызов функции отображения маршрутов
     displayRoutes();
 
+    //Пагинация таблицы маршрутов
     const paginationContainer = document.querySelector(".pagination");
     paginationContainer.innerHTML = '';
     const totalPages = Math.ceil(b.length / itemsPerPage);
@@ -81,6 +88,7 @@ async function d() {
         paginationContainer.appendChild(li);
     }
 
+    //Переключение видимости таблицы гидов 
     function toggleGuidesTable(routeId) {
         const guidesTableSection = document.getElementById('guidesTableSection');
         const submitRequestBtn = document.getElementById('submitRequestBtn');
@@ -94,8 +102,9 @@ async function d() {
             selectedRouteId = routeId;
         }
     }
-}
+}   
 
+//Функция отображения/заполнения таблицы гидов
 async function showGuidesTable(routeId) {
     const guidesTableSection = document.getElementById('guidesTableSection');
     const submitRequestBtn = document.getElementById('submitRequestBtn');
@@ -103,12 +112,14 @@ async function showGuidesTable(routeId) {
 
     const guidesData = await getGuidesData(routeId);
 
-    guidesTableBody.innerHTML = '';
+
+  
+    
 
     for (let i = 0; i < guidesData.length; i++) {
+
         guidesTableBody.innerHTML += `
             <tr>
-                <td><img src="../images/user.png" alt="Profile Image"></td>
                 <td>${guidesData[i].name}</td>
                 <td>${guidesData[i].language}</td>
                 <td>${guidesData[i].workExperience}</td>
@@ -121,11 +132,14 @@ async function showGuidesTable(routeId) {
     submitRequestBtn.style.display = 'none';
 }
 
+//Запоминание выбранного маршрута
 function toggleGuidesTable(routeId) {
     const selectedRouteName = document.querySelector(`tr[data-route-id="${routeId}"] td:first-child`).textContent;
     document.getElementById('selectedRoute').textContent = selectedRouteName; // Установка выбранного маршрута в модальном окне
     myModal.show();
 }
+
+//Отображение итоговой цены равной стоимости услуг гида
 function handleGuideSelection(guideId, guideName, guidePrice) {
     const submitRequestBtn = document.getElementById('submitRequestBtn');
     const selectedGuideInfo = document.getElementById('selectedGuideInfo');
@@ -144,10 +158,7 @@ function handleGuideSelection(guideId, guideName, guidePrice) {
     selectedGuidePriceElement.textContent = `${selectedGuidePrice} руб.`;
 }
 
-
-// Остальная часть вашего существующего кода...
-
-
+//функция отображения полного описание и всех объектов выбранного маршрута
 function showFullContent() {
     const descriptionCell = this.querySelector('.description-cell');
     const mainObjectCell = this.querySelector('.main-object-cell');
@@ -169,7 +180,9 @@ function showFullContent() {
     }
 }
 
+//Обработчик событий для отображения всего содержимого
 document.addEventListener('DOMContentLoaded', d);
+
 
 document.addEventListener('DOMContentLoaded', async function () {
     try {
@@ -184,8 +197,9 @@ document.addEventListener('DOMContentLoaded', async function () {
         console.error('Error during page initialization:', error);
     }
 });
+
+//Обработчик событий для чекбоксов модального окна 
 document.addEventListener('DOMContentLoaded', function () {
-    // ...
 
     const discountCheckbox = document.querySelector('#discountCheckbox');
     const markupCheckbox = document.querySelector('#markupCheckbox');
@@ -198,7 +212,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const pricePerHour = parseFloat(selectedGuidePrice);
         let totalPrice = pricePerHour * selectedDuration;
 
-        // Проверяем оба флажка: скидку и наценку
+        // Проверка обоих чекбоксов для последующего преобразования итоговой стоимости
         if (discountCheckbox.checked) {
             totalPrice -= totalPrice * 0.15;
         }
@@ -209,10 +223,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
         document.getElementById('selectedGuidePrice').textContent = totalPrice.toFixed(2);
     }
-
-    // ...
 });
 
+
+//Парсер обработки данных по объектам маршрутов для выпадающего списка 
 async function parser() {
     let oObject = [];
     let dataq = await getData();
@@ -236,6 +250,7 @@ async function parser() {
 
     return oObject;
 }
+
 
 async function populateMainObjectDropdown(mainObjects) {
     let data = await getData()
@@ -340,3 +355,56 @@ function calculateTotalPrice() {
     }
 }
     
+document.addEventListener("DOMContentLoaded", function () {
+
+    // Добавьте прослушиватель событий для кнопки "Отправить" в модальном окне
+    const submitButtonModal = document.getElementById("submitRequestBtnModal");
+    submitButtonModal.addEventListener("click", function () { // Исправлено: submitButton -> submitButtonModal
+
+       
+        // Получите данные формы
+        const selectedGuideInfo = document.getElementById("selectedGuideInfo").innerText;
+        const selectedRoute = document.getElementById("selectedRoute").innerText;
+        const date = document.querySelector("#staticBackdrop input[type='date']").value;
+        const time = document.querySelector("#staticBackdrop input[type='time']").value;
+        const duration = document.getElementById("durationSelect").value;
+        const persons = document.querySelector("#staticBackdrop input[type='number']").value;
+        const discountCheckbox = document.getElementById("discountCheckbox").checked;
+        const markupCheckbox = document.getElementById("markupCheckbox").checked;
+
+        // Составьте данные для запроса
+        const requestData = {
+            date: date,
+            duration: parseInt(duration),
+            guide_id: parseInt(selectedGuideInfo),
+            id: 0, // Замените на соответствующее значение
+            optionFirst: discountCheckbox,
+            optionSecond: markupCheckbox,
+            persons: parseInt(persons),
+            price: 0, // Замените на соответствующее значение
+            route_id: parseInt(selectedRoute),
+            time: time
+        };
+
+        // Отправьте POST-запрос
+        fetch("http://exam-2023-1-api.std-900.ist.mospolytech.ru/api/orders?api_key=880ab64c-4356-4119-aa51-19af575a54ae", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(requestData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Обработайте данные ответа по необходимости
+            console.log("Заявка успешно отправлена:", data);
+            // Вы можете обновить пользовательский интерфейс или выполнить другие действия на основе ответа
+        })
+        .catch(error => {
+            console.error("Ошибка отправки заявки:", error);
+            // Обработайте ошибки, отобразите сообщение и т. д.
+        });
+    });
+    console.log("Данные отправлены успешно");
+    // ... (ваш существующий код)
+});

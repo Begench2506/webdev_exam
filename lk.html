@@ -9,8 +9,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;500&family=Russo+One&display=swap" rel="stylesheet">
 	<link rel="shortcut icon" href="images/logo.png">
 	<link href="css/bootstrap.min.css" rel="stylesheet">
-	<link href="css/style.css" rel="stylesheet">
-	<script src="js/main.js" defer></script>
+	<!-- <link href="css/lk.css" rel="stylesheet"> -->
+	<script src="js/lk.js" defer></script>
 	<title>ГидГрад</title>
 </head>
 <body>
@@ -32,7 +32,36 @@
             </nav>
     </header>
 
-
+    <section class="routes" id="our_routes">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="text-center text-uppercase mt-5 mb-5">Список маршрутов</h2>
+                </div>
+            </div>
+            <!-- Ваш код для навигации и фильтрации, оставлен без изменений -->
+    
+            <div class="table-responsive">
+                <table class="table table-hover align-middle text-left" id="routes">
+                    <thead>
+                        <tr>
+                            <th>Название маршрута</th>
+                            <th>Стоимость</th>
+                            <th>Количество человек</th>
+                        </tr>
+                    </thead>
+                    <tbody id="routesBody">
+                        <!-- Здесь будут добавляться строки с данными из API -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <ul class="pagination justify-content-center"></ul>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <footer class="container-fluid" style="background-color: #0b193c; color: white;">
 		<div class="row">
