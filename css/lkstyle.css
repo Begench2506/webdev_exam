@@ -1,0 +1,30 @@
+.trashButton {
+    background-color: transparent;
+    border: none;
+}
+
+.eyeButton {
+    background-color: transparent;
+    border: none;
+}
+
+.penButton {
+    background-color: transparent;
+    border: none;
+}
+
+.status_success {
+    text-align: center;
+    color: white;
+    margin: 5px;
+    padding: 5px;
+    background-color: rgb(16, 168, 90);
+}
+
+.status_failed {
+    text-align: center;
+    color: white;
+    margin: 5px;
+    padding: 5px;
+    background-color: rgb(137, 14, 14);
+}

@@ -1,22 +1,22 @@
 let selectedRouteId = null;
 let selectedGuideId = null;
 let selectedGuidePrice = null;
-
-//Получаем данные о маршрутах
+let selectedRouteId2;
+//Получение данных о маршрутах
 async function getData() {
     const response = await fetch('http://exam-2023-1-api.std-900.ist.mospolytech.ru/api/routes?api_key=880ab64c-4356-4119-aa51-19af575a54ae');
     const data = await response.json();
     return data;
 }
 
-//Получаем данные о гидах
+//Получение данных о гидах
 async function getGuidesData(routeId) {
     const response = await fetch(`http://exam-2023-1-api.std-900.ist.mospolytech.ru/api/routes/${routeId}/guides?api_key=880ab64c-4356-4119-aa51-19af575a54ae`);
     const data = await response.json();
     return data;
 }
 
-//Функция отвечающая за вывод информации
+//Вывод информации
 async function d() {
     let table = document.getElementById("routes");
     let tableRoute = document.createElement("tbody");
@@ -28,7 +28,7 @@ async function d() {
     let selectedRouteId = null;
     let selectedGuideId = null;
 
-    //Функция отображающая маршруты
+    //Вывод маршрутов
     function displayRoutes() {
         const startIndex = (currentPage - 1) * itemsPerPage;
         const endIndex = startIndex + itemsPerPage;
@@ -44,7 +44,7 @@ async function d() {
                     <td><button type="button" class="btn btn-secondary" onclick="toggleGuidesTable('${currentRoutes[i].id}')">Выбрать</button></td>
                 </tr>`;
         }
-        
+
         //Заполнение таблицы маршрутов
         const tableHeader = `
             <thead class="table-secondary" style="background-color: #0b193c; color: white;">
@@ -100,9 +100,10 @@ async function d() {
         } else {
             showGuidesTable(routeId);
             selectedRouteId = routeId;
+            selectedRouteId2 = routeId;
         }
     }
-}   
+}
 
 //Функция отображения/заполнения таблицы гидов
 async function showGuidesTable(routeId) {
@@ -113,13 +114,14 @@ async function showGuidesTable(routeId) {
     const guidesData = await getGuidesData(routeId);
 
 
-  
-    
+
+
 
     for (let i = 0; i < guidesData.length; i++) {
 
         guidesTableBody.innerHTML += `
             <tr>
+                <td><img src="images/user.png" height="70px" ></td>
                 <td>${guidesData[i].name}</td>
                 <td>${guidesData[i].language}</td>
                 <td>${guidesData[i].workExperience}</td>
@@ -134,6 +136,7 @@ async function showGuidesTable(routeId) {
 
 //Запоминание выбранного маршрута
 function toggleGuidesTable(routeId) {
+    selectedRouteId2 = routeId;
     const selectedRouteName = document.querySelector(`tr[data-route-id="${routeId}"] td:first-child`).textContent;
     document.getElementById('selectedRoute').textContent = selectedRouteName; // Установка выбранного маршрута в модальном окне
     myModal.show();
@@ -146,7 +149,7 @@ function handleGuideSelection(guideId, guideName, guidePrice) {
 
     // Обновляем содержимое модального окна информацией о выбранном маршруте и гиде
     selectedGuideInfo.innerHTML = `${guideName}`;
-    
+
     // Сохраняем выбранное название маршрута и стоимость гида для последующего использования
     selectedGuideId = guideId;
     selectedGuidePrice = parseFloat(guidePrice); // Преобразуем цену в число
@@ -203,7 +206,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const discountCheckbox = document.querySelector('#discountCheckbox');
     const markupCheckbox = document.querySelector('#markupCheckbox');
-
     discountCheckbox.addEventListener('change', updateTotalPrice);
     markupCheckbox.addEventListener('change', updateTotalPrice);
 
@@ -215,6 +217,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // Проверка обоих чекбоксов для последующего преобразования итоговой стоимости
         if (discountCheckbox.checked) {
             totalPrice -= totalPrice * 0.15;
+
         }
 
         if (markupCheckbox.checked) {
@@ -261,7 +264,7 @@ async function populateMainObjectDropdown(mainObjects) {
         v.value = i
         mainObjectFilter.appendChild(v)
     };
-    
+
 
 }
 
@@ -317,10 +320,9 @@ function displayRoutes(routes) {
     });
 }
 
-document.getElementById('submitRequestBtn').addEventListener('click', function() {
+document.getElementById('submitRequestBtn').addEventListener('click', function () {
     if (selectedRouteId !== null && selectedGuideId !== null) {
         console.log('Оформление заявки для маршрута:', selectedRouteId, 'и гида:', selectedGuideId);
-        // Добавьте здесь код для обработки оформления заявки
     } else {
         console.log('Выберите маршрут и гида перед оформлением заявки.');
     }
@@ -328,25 +330,21 @@ document.getElementById('submitRequestBtn').addEventListener('click', function()
 
 
 function calculateTotalPrice() {
-    // Получаем значение выбранного часов в выпадающем списке "Длительность"
     const selectedDuration = document.getElementById('durationSelect').value;
 
-    // Проверяем, выбрана ли длительность
     if (selectedDuration !== 'Длительность') {
-        // Преобразуем значение в число
         const hours = parseInt(selectedDuration);
 
-        // Проверяем, выбран ли гид и установлена ли его цена
         if (selectedGuideId !== null && selectedGuidePrice !== null) {
-            // Вычисляем итоговую цену
             const totalPrice = hours * selectedGuidePrice;
 
-            // Обновляем элемент с идентификатором "selectedGuidePrice"
             const selectedGuidePriceElement = document.getElementById('selectedGuidePrice');
             selectedGuidePriceElement.textContent = `${totalPrice} руб.`;
 
-            // Отображаем кнопку "Оформить заявку"
+            const submitRequestBtn = document.getElementById('submitRequestBtn');
             submitRequestBtn.style.display = 'block';
+            submitRequestBtn.dataset.routeId = String(selectedRouteId);
+            submitRequestBtn.dataset.guideId = String(selectedGuideId);
         } else {
             console.log('Выберите гида перед расчетом цены.');
         }
@@ -354,57 +352,76 @@ function calculateTotalPrice() {
         console.log('Выберите длительность экскурсии для расчета цены.');
     }
 }
-    
+
 document.addEventListener("DOMContentLoaded", function () {
-
-    // Добавьте прослушиватель событий для кнопки "Отправить" в модальном окне
     const submitButtonModal = document.getElementById("submitRequestBtnModal");
-    submitButtonModal.addEventListener("click", function () { // Исправлено: submitButton -> submitButtonModal
-
-       
-        // Получите данные формы
-        const selectedGuideInfo = document.getElementById("selectedGuideInfo").innerText;
-        const selectedRoute = document.getElementById("selectedRoute").innerText;
+    submitButtonModal.addEventListener("click", function () {
         const date = document.querySelector("#staticBackdrop input[type='date']").value;
         const time = document.querySelector("#staticBackdrop input[type='time']").value;
         const duration = document.getElementById("durationSelect").value;
         const persons = document.querySelector("#staticBackdrop input[type='number']").value;
         const discountCheckbox = document.getElementById("discountCheckbox").checked;
         const markupCheckbox = document.getElementById("markupCheckbox").checked;
-
-        // Составьте данные для запроса
         const requestData = {
             date: date,
             duration: parseInt(duration),
-            guide_id: parseInt(selectedGuideInfo),
-            id: 0, // Замените на соответствующее значение
+            guide_id: parseInt(selectedGuideId),
+            id: 0,
             optionFirst: discountCheckbox,
             optionSecond: markupCheckbox,
             persons: parseInt(persons),
-            price: 0, // Замените на соответствующее значение
+            price: 0,
             route_id: parseInt(selectedRoute),
             time: time
         };
 
-        // Отправьте POST-запрос
+        // Добавляем id маршрута и id гида к данным заявки
+        requestData.route_id = Number(selectedRouteId2);
+        requestData.guide_id = Number(selectedGuideId);
+        requestData.price = selectedGuidePrice;
+
+        let formData = new URLSearchParams();
+        for (const [key, value] of Object.entries(requestData)) {
+            formData.append(key, value);
+        }
+
         fetch("http://exam-2023-1-api.std-900.ist.mospolytech.ru/api/orders?api_key=880ab64c-4356-4119-aa51-19af575a54ae", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(requestData)
+            headers: new Headers({
+                "Content-Type": "application/x-www-form-urlencoded"
+            }),
+            body: formData
         })
-        .then(response => response.json())
-        .then(data => {
-            // Обработайте данные ответа по необходимости
-            console.log("Заявка успешно отправлена:", data);
-            // Вы можете обновить пользовательский интерфейс или выполнить другие действия на основе ответа
-        })
-        .catch(error => {
-            console.error("Ошибка отправки заявки:", error);
-            // Обработайте ошибки, отобразите сообщение и т. д.
-        });
+            .then(response => {
+                if (response.ok) {
+                    showMessage("Заявка успешно оформлена", 'success');
+                    return response.json();
+                } else {
+                    showMessage("Ошибка оформления заявки", 'failed');
+                    throw new Error('Ошибка отправки запроса');
+                }
+            })
+            .then(data => {
+                console.log("Успешно отправлено:", data);
+            })
+            .catch(error => {
+                console.error("Ошибка отправки запроса:", error);
+            });
     });
-    console.log("Данные отправлены успешно");
-    // ... (ваш существующий код)
+
+
 });
+
+function showMessage(text, category = "success") {
+    let messBox = document.querySelector('.status');
+    let newMess = document.createElement('div');
+    newMess.innerHTML = text;
+    messBox.append(newMess);
+    setTimeout(() => newMess.remove(), 10000)
+    if (category === 'failed') {
+        newMess.classList.add('status_failed')
+    }
+    else if (category === 'success') {
+        newMess.classList.add('status_success')
+    }
+}
